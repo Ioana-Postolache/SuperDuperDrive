@@ -117,3 +117,6 @@ String decryptedPassword = encryptionService.decryptValue(encryptedPassword, enc
 
 [Hash Function](https://en.wikipedia.org/wiki/Hash_function)
 [Encryption](https://en.wikipedia.org/wiki/Encryption)
+
+
+File upload: https://attacomsian.com/blog/spring-boot-thymeleaf-file-upload
