@@ -8,7 +8,7 @@ import java.util.List;
 
 @Service
 public class FileListService {
-    private FileMapper fileMapper;
+    private final FileMapper fileMapper;
 
     public FileListService(FileMapper fileMapper) {
         this.fileMapper = fileMapper;
@@ -24,6 +24,10 @@ public class FileListService {
 
     public File getFile(int userId, String fileName) {
         return fileMapper.getFileByFileName(userId, fileName);
+    }
+
+    public boolean doesFileAlreadyExist(int userId, String fileName){
+        return getFile(userId, fileName) != null;
     }
 
     public int deleteFile(int userId, String fileName) {
