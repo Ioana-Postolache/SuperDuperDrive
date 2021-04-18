@@ -1,6 +1,8 @@
 package com.udacity.jwdnd.course1.cloudstorage.controller;
 
+import com.udacity.jwdnd.course1.cloudstorage.model.Credential;
 import com.udacity.jwdnd.course1.cloudstorage.model.Note;
+import com.udacity.jwdnd.course1.cloudstorage.service.CredentialListService;
 import com.udacity.jwdnd.course1.cloudstorage.service.FileListService;
 import com.udacity.jwdnd.course1.cloudstorage.service.NoteListService;
 import com.udacity.jwdnd.course1.cloudstorage.service.UserService;
@@ -21,31 +23,41 @@ public class HomeController {
     private final UserService userService;
     private final FileListService fileListService;
     private final NoteListService noteListService;
+    private final CredentialListService credentialListService;
 
-    public HomeController(UserService userService, FileListService fileListService, NoteListService noteListService) {
+    public HomeController(UserService userService, FileListService fileListService, NoteListService noteListService, CredentialListService credentialListService) {
         this.userService = userService;
         this.fileListService = fileListService;
         this.noteListService = noteListService;
+        this.credentialListService = credentialListService;
     }
 
     @GetMapping
-    public String getHomePage(Authentication authentication, Note noteForm, Model model, HttpServletRequest request) {
+    public String getHomePage(Authentication authentication, Note noteForm, Credential credentialForm, Model model, HttpServletRequest request) {
         int userId = userService.getUserId(authentication.getName());
         model.addAttribute("files", this.fileListService.getFiles(userId));
         model.addAttribute("notes", this.noteListService.getNotes(userId));
-        model.addAttribute("noteForm",noteForm);
+        model.addAttribute("credentials", this.credentialListService.getCredentials(userId));
+        model.addAttribute("noteForm", noteForm);
+        model.addAttribute("credentialForm", credentialForm);
         Map<String, ?> inputFlashMap = RequestContextUtils.getInputFlashMap(request);
         if (inputFlashMap != null) {
             String activeTab = (String) inputFlashMap.get("activeTab");
             model.addAttribute("activeTab", activeTab);
-            if(activeTab.equals("files")){
-                model.addAttribute("fileError", inputFlashMap.get("fileError"));
-                model.addAttribute("fileSuccess", inputFlashMap.get("fileSuccess"));
-            } else if(activeTab.equals("notes")){
-                model.addAttribute("noteError", inputFlashMap.get("noteError"));
-                model.addAttribute("noteSuccess", inputFlashMap.get("noteSuccess"));
+            switch (activeTab) {
+                case "files":
+                    model.addAttribute("fileError", inputFlashMap.get("fileError"));
+                    model.addAttribute("fileSuccess", inputFlashMap.get("fileSuccess"));
+                    break;
+                case "notes":
+                    model.addAttribute("noteError", inputFlashMap.get("noteError"));
+                    model.addAttribute("noteSuccess", inputFlashMap.get("noteSuccess"));
+                    break;
+                case "credentials":
+                    model.addAttribute("credentialError", inputFlashMap.get("credentialError"));
+                    model.addAttribute("credentialSuccess", inputFlashMap.get("credentialSuccess"));
+                    break;
             }
-
         } else {
             model.addAttribute("activeTab", "files");
         }
