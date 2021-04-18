@@ -8,10 +8,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.io.IOException;
 
@@ -25,13 +25,7 @@ public class FileController {
         this.fileListService = fileListService;
     }
 
-    @GetMapping("/files")
-    public String getHomePage(Authentication authentication, Model model) {
-        int userId = userService.getUser(authentication.getName()).getUserId();
-        model.addAttribute("files", this.fileListService.getFiles(userId));
-        return "home";
-    }
-
+    // for download file
     @GetMapping("/files/{fileName}")
     public @ResponseBody
     ResponseEntity<byte[]> getFile(Authentication authentication, @PathVariable String fileName) {
@@ -52,15 +46,15 @@ public class FileController {
 //    }
 
     @PostMapping("/files")
-    public String uploadFile(Authentication authentication, @RequestParam("fileUpload") MultipartFile uploadedFile, Model model) throws IOException {
+    public RedirectView uploadFile(Authentication authentication, @RequestParam("fileUpload") MultipartFile uploadedFile, RedirectAttributes redirectAttributes) throws IOException {
         int userId = userService.getUser(authentication.getName()).getUserId();
         String fileName = uploadedFile.getOriginalFilename();
 
         if(uploadedFile.getSize() > 2097152){
-            model.addAttribute("fileError", "File exceeds its maximum permitted size of 1048576 bytes..");
+            redirectAttributes.addFlashAttribute("fileError", "File exceeds its maximum permitted size of 1048576 bytes..");
         }
         else if (this.fileListService.doesFileAlreadyExist(userId, fileName)) {
-            model.addAttribute("fileError", "File already exists.");
+            redirectAttributes.addFlashAttribute("fileError", "File already exists.");
         } else {
             File newFile = new File();
             newFile.setFileName(fileName);
@@ -68,24 +62,25 @@ public class FileController {
             newFile.setFileSize(uploadedFile.getSize());
             newFile.setUserId(userId);
             newFile.setFileData(uploadedFile.getInputStream().readAllBytes());
-            model.addAttribute("fileSuccess", "File successfully added.");
+            redirectAttributes.addFlashAttribute("fileSuccess", "File successfully added.");
             this.fileListService.addFile(newFile);
         }
-        model.addAttribute("files", this.fileListService.getFiles(userId));
-        return "home";
+        redirectAttributes.addFlashAttribute("activeTab", "files");
+        return new RedirectView("home");
     }
 
     @GetMapping(value = "/files/delete/{fileName}")
-    public String deleteFile(Authentication authentication, @PathVariable String fileName, Model model) {
+    public RedirectView deleteFile(Authentication authentication, @PathVariable String fileName, RedirectAttributes redirectAttributes) {
         int userId = userService.getUser(authentication.getName()).getUserId();
         boolean wasFileDeleted = fileListService.deleteFile(userId, fileName) > 0;
         if (wasFileDeleted) {
-            model.addAttribute("fileSuccess", "File successfully deleted.");
+            redirectAttributes.addFlashAttribute("fileSuccess", "File successfully deleted.");
         } else {
-            model.addAttribute("fileError", "File couldn't be deleted.");
+            redirectAttributes.addFlashAttribute("fileError", "File couldn't be deleted.");
         }
-        model.addAttribute("files", this.fileListService.getFiles(userId));
-        return "home";
+        redirectAttributes.addFlashAttribute("activeTab", "files");
+        // without the "/" we were getting redirected relative to the current ServletContext
+        // instead of relative to the web server
+        return new RedirectView("/home");
     }
-
 }
