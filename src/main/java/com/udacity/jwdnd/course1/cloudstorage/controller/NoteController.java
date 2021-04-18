@@ -1,6 +1,6 @@
 package com.udacity.jwdnd.course1.cloudstorage.controller;
 
-import com.udacity.jwdnd.course1.cloudstorage.model.NoteForm;
+import com.udacity.jwdnd.course1.cloudstorage.model.Note;
 import com.udacity.jwdnd.course1.cloudstorage.service.NoteListService;
 import com.udacity.jwdnd.course1.cloudstorage.service.UserService;
 import org.springframework.security.core.Authentication;
@@ -19,31 +19,16 @@ public class NoteController {
         this.noteListService = noteListService;
     }
 
-    // for download note
-//    @GetMapping("/notes/{noteName}")
-//    public @ResponseBody
-//    ResponseEntity<byte[]> getNote(Authentication authentication, @PathVariable String noteName) {
-//        int userId = userService.getUser(authentication.getName()).getUserId();
-//        Note note = this.noteListService.getNote(userId, noteName);
-//        return ResponseEntity.ok()
-//                .contentType(MediaType.parseMediaType(note.getContentType()))
-//                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; notename=\"" + noteName + "\"")
-//                .body(note.getNoteData());
-//    }
-//    // option using param
-//    @GetMapping("/notes")
-//    public @ResponseBody
-//    byte[] getNote(Authentication authentication, @RequestParam("noteName") String noteName) {
-//        int userId = userService.getUser(authentication.getName()).getUserId();
-//        Note note = this.noteListService.getNote(userId, noteName);
-//        return note.getNoteData();
-//    }
-
     @PostMapping("/notes")
-    public RedirectView createNote(Authentication authentication, NoteForm noteForm, RedirectAttributes redirectAttributes) {
+    public RedirectView createOrUpdateNote(Authentication authentication, Note noteForm, RedirectAttributes redirectAttributes) {
         int userId = userService.getUser(authentication.getName()).getUserId();
         noteForm.setUserId(userId);
-        this.noteListService.addNote(noteForm);
+        if (noteForm.getNoteId() == null) {
+            this.noteListService.addNote(noteForm);
+        } else {
+            this.noteListService.updateNote(noteForm);
+        }
+        noteForm.setNoteId(null);
         noteForm.setNoteTitle("");
         noteForm.setNoteDescription("");
         redirectAttributes.addFlashAttribute("activeTab", "notes");
