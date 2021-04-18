@@ -50,17 +50,16 @@ public class NoteController {
         return new RedirectView("home");
     }
 
-    @GetMapping(value = "/notes/delete/{noteName}")
-    public String deleteNote(Authentication authentication, @PathVariable String noteName, RedirectAttributes redirectAttributes) {
+    @GetMapping(value = "/notes/delete/{noteTitle}")
+    public RedirectView deleteNote(Authentication authentication, @PathVariable String noteTitle, RedirectAttributes redirectAttributes) {
         int userId = userService.getUser(authentication.getName()).getUserId();
-        boolean wasNoteDeleted = noteListService.deleteNote(userId, noteName) > 0;
+        boolean wasNoteDeleted = noteListService.deleteNote(userId, noteTitle) > 0;
         if (wasNoteDeleted) {
             redirectAttributes.addFlashAttribute("noteSuccess", "Note successfully deleted.");
         } else {
             redirectAttributes.addFlashAttribute("noteError", "Note couldn't be deleted.");
         }
-        redirectAttributes.addFlashAttribute("notes", this.noteListService.getNotes(userId));
         redirectAttributes.addFlashAttribute("activeTab", "notes");
-        return "home";
+        return new RedirectView("/home");
     }
 }
