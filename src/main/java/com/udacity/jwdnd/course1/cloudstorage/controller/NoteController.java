@@ -21,7 +21,7 @@ public class NoteController {
 
     @PostMapping("/notes")
     public RedirectView createOrUpdateNote(Authentication authentication, Note noteForm, RedirectAttributes redirectAttributes) {
-        int userId = userService.getUser(authentication.getName()).getUserId();
+        int userId = userService.getUserId(authentication.getName());
         noteForm.setUserId(userId);
         if (noteForm.getNoteId() == null) {
             this.noteListService.addNote(noteForm);
@@ -37,7 +37,7 @@ public class NoteController {
 
     @GetMapping(value = "/notes/delete/{noteTitle}")
     public RedirectView deleteNote(Authentication authentication, @PathVariable String noteTitle, RedirectAttributes redirectAttributes) {
-        int userId = userService.getUser(authentication.getName()).getUserId();
+        int userId = userService.getUserId(authentication.getName());
         boolean wasNoteDeleted = noteListService.deleteNote(userId, noteTitle) > 0;
         if (wasNoteDeleted) {
             redirectAttributes.addFlashAttribute("noteSuccess", "Note successfully deleted.");

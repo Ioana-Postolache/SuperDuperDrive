@@ -29,7 +29,7 @@ public class FileController {
     @GetMapping("/files/{fileName}")
     public @ResponseBody
     ResponseEntity<byte[]> getFile(Authentication authentication, @PathVariable String fileName) {
-        int userId = userService.getUser(authentication.getName()).getUserId();
+        int userId = userService.getUserId(authentication.getName());
         File file = this.fileListService.getFile(userId, fileName);
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(file.getContentType()))
@@ -47,7 +47,7 @@ public class FileController {
 
     @PostMapping("/files")
     public RedirectView uploadFile(Authentication authentication, @RequestParam("fileUpload") MultipartFile uploadedFile, RedirectAttributes redirectAttributes) throws IOException {
-        int userId = userService.getUser(authentication.getName()).getUserId();
+        int userId = userService.getUserId(authentication.getName());
         String fileName = uploadedFile.getOriginalFilename();
 
         if(uploadedFile.getSize() > 2097152){
@@ -71,7 +71,7 @@ public class FileController {
 
     @GetMapping(value = "/files/delete/{fileName}")
     public RedirectView deleteFile(Authentication authentication, @PathVariable String fileName, RedirectAttributes redirectAttributes) {
-        int userId = userService.getUser(authentication.getName()).getUserId();
+        int userId = userService.getUserId(authentication.getName());
         boolean wasFileDeleted = fileListService.deleteFile(userId, fileName) > 0;
         if (wasFileDeleted) {
             redirectAttributes.addFlashAttribute("fileSuccess", "File successfully deleted.");

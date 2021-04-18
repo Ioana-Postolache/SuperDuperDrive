@@ -30,7 +30,7 @@ public class HomeController {
 
     @GetMapping
     public String getHomePage(Authentication authentication, Note noteForm, Model model, HttpServletRequest request) {
-        int userId = userService.getUser(authentication.getName()).getUserId();
+        int userId = userService.getUserId(authentication.getName());
         model.addAttribute("files", this.fileListService.getFiles(userId));
         model.addAttribute("notes", this.noteListService.getNotes(userId));
         model.addAttribute("noteForm",noteForm);
