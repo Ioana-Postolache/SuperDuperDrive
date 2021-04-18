@@ -22,8 +22,8 @@ public class NoteListService {
         return noteMapper.getAllNotesByUser(userId);
     }
 
-    public int deleteNote(int userId, String noteTitle) {
-        return noteMapper.deleteNoteByNoteName(userId, noteTitle);
+    public int deleteNote(int userId, int noteId) {
+        return noteMapper.deleteNoteByNoteId(userId, noteId);
     }
 
     public int updateNote(Note note) {
