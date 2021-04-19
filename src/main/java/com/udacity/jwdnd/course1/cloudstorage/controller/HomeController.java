@@ -2,10 +2,7 @@ package com.udacity.jwdnd.course1.cloudstorage.controller;
 
 import com.udacity.jwdnd.course1.cloudstorage.model.Credential;
 import com.udacity.jwdnd.course1.cloudstorage.model.Note;
-import com.udacity.jwdnd.course1.cloudstorage.service.CredentialListService;
-import com.udacity.jwdnd.course1.cloudstorage.service.FileListService;
-import com.udacity.jwdnd.course1.cloudstorage.service.NoteListService;
-import com.udacity.jwdnd.course1.cloudstorage.service.UserService;
+import com.udacity.jwdnd.course1.cloudstorage.service.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,12 +21,14 @@ public class HomeController {
     private final FileListService fileListService;
     private final NoteListService noteListService;
     private final CredentialListService credentialListService;
+    private final EncryptionService encryptionService;
 
-    public HomeController(UserService userService, FileListService fileListService, NoteListService noteListService, CredentialListService credentialListService) {
+    public HomeController(UserService userService, FileListService fileListService, NoteListService noteListService, CredentialListService credentialListService, EncryptionService encryptionService) {
         this.userService = userService;
         this.fileListService = fileListService;
         this.noteListService = noteListService;
         this.credentialListService = credentialListService;
+        this.encryptionService = encryptionService;
     }
 
     @GetMapping
@@ -40,6 +39,7 @@ public class HomeController {
         model.addAttribute("credentials", this.credentialListService.getCredentials(userId));
         model.addAttribute("noteForm", noteForm);
         model.addAttribute("credentialForm", credentialForm);
+        model.addAttribute("encryptionService", encryptionService);
         Map<String, ?> inputFlashMap = RequestContextUtils.getInputFlashMap(request);
         if (inputFlashMap != null) {
             String activeTab = (String) inputFlashMap.get("activeTab");
