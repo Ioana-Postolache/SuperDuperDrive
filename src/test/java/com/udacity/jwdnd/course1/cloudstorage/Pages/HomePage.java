@@ -19,6 +19,9 @@ public class HomePage {
     @FindBy(id = "nav-credentials-tab")
     private WebElement navCredentialsTab;
 
+    @FindBy(css = ".active.show")
+    private WebElement activeTav;
+
     public HomePage(WebDriver driver) {
         PageFactory.initElements(driver, this);
     }
@@ -35,7 +38,15 @@ public class HomePage {
         return navNotesTab;
     }
 
+    public void goToNavNotesTab() {
+        navNotesTab.click();
+    }
+
     public WebElement getNavCredentialsTab() {
         return navCredentialsTab;
+    }
+
+    public WebElement getActiveTab() {
+        return activeTav;
     }
 }
