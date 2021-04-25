@@ -1,5 +1,6 @@
 package com.udacity.jwdnd.course1.cloudstorage.Pages;
 
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -26,8 +27,8 @@ public class HomePage {
         PageFactory.initElements(driver, this);
     }
 
-    public void logout() {
-        logoutButton.click();
+    public void logout(WebDriver driver) {
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", logoutButton);
     }
 
     public WebElement getNavFilesTab() {
@@ -38,15 +39,19 @@ public class HomePage {
         return navNotesTab;
     }
 
-    public void goToNavNotesTab() {
-        navNotesTab.click();
+    public void goToNavNotesTab(WebDriver driver) {
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", navNotesTab);
     }
 
     public WebElement getNavCredentialsTab() {
         return navCredentialsTab;
     }
 
-    public WebElement getActiveTab() {
-        return activeTav;
+    public void goToNavCredentialsTab(WebDriver driver) {
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", navCredentialsTab);
+    }
+
+    public String getActiveTabText() {
+        return activeTav.getText();
     }
 }

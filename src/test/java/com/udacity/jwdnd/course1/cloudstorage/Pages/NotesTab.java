@@ -13,9 +13,6 @@ public class NotesTab {
     @FindBy(id = "add-note-button")
     private WebElement addNoteButton;
 
-    @FindBy(id = "noteModal")
-    private WebElement noteModal;
-
     @FindBy(css = "#note-title.form-control")
     private WebElement noteTitleInput;
 
@@ -43,12 +40,12 @@ public class NotesTab {
         submitButton.click();
     }
 
-    public WebElement getFirstRowNoteTitle() {
-        return noteTableFirstRow.findElement(By.cssSelector("[data-content='noteTitle']"));
+    public String getFirstRowNoteTitle() {
+        return noteTableFirstRow.findElement(By.cssSelector("[data-content='noteTitle']")).getText();
     }
 
-    public WebElement getFirstRowNoteDescription() {
-        return noteTableFirstRow.findElement(By.cssSelector("[data-content='noteDescription']"));
+    public String getFirstRowNoteDescription() {
+        return noteTableFirstRow.findElement(By.cssSelector("[data-content='noteDescription']")).getText();
     }
 
     public void addNote(String noteTitle, String noteDescription, WebDriver driver) {
@@ -60,7 +57,7 @@ public class NotesTab {
     }
 
     public void editNote(String noteTitle, String noteDescription, WebDriver driver) {
-        WebElement firstRowEditButton = noteTableFirstRow.findElement(By.cssSelector("[data-buttontype='edit']"));
+        WebElement firstRowEditButton = noteTableFirstRow.findElement(By.cssSelector("[data-buttonType='edit']"));
         ((JavascriptExecutor) driver).executeScript("arguments[0].click();", firstRowEditButton);
         waitForNotesModal(driver);
         createOrUpdateNote(noteTitle, noteDescription);

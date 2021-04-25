@@ -99,7 +99,7 @@
                                 <button type="button" class="btn btn-success" th:data-noteId="${note.noteId}"
                                         th:data-noteTitle="${note.noteTitle}"
                                         th:data-noteDescription="${note.noteDescription}"
-                                        data-buttontype="edit"
+                                        data-buttonType="edit"
                                         onclick="showNoteModal(this.getAttribute('data-noteId'),this.getAttribute('data-noteTitle'),this.getAttribute('data-noteDescription'));">
                                     Edit
                                 </button>
@@ -151,7 +151,7 @@
             </div>
             <div class="tab-pane fade" th:classappend="${credentialsActive? 'show active' : ''}" id="nav-credentials"
                  role="tabpanel" aria-labelledby="nav-credentials-tab">
-                <button style="margin: 0.25em;" type="button" class="btn btn-info float-right"
+                <button id="add-credential-button" style="margin: 0.25em;" type="button" class="btn btn-info float-right"
                         onclick="showCredentialModal()">
                     + Add a New Credential
                 </button>
@@ -169,7 +169,7 @@
                         <tbody th:each="credential : ${credentials}">
                         <tr>
                             <td>
-                                <button type="button" class="btn btn-success" th:data-id="${credential.credentialId}"
+                                <button data-buttonType="edit" type="button" class="btn btn-success" th:data-id="${credential.credentialId}"
                                         th:data-url="${credential.url}"
                                         th:data-username="${credential.username}"
                                         th:data-password="${encryptionService.decryptValue(credential.password, credential.key)}"
@@ -179,9 +179,9 @@
                                 <a th:href="@{'/credentials/delete/' + ${credential.credentialId}}"
                                    class="btn btn-danger">Delete</a>
                             </td>
-                            <th scope="row" th:text="${credential.url}">Example Credential URL</th>
-                            <td th:text="${credential.username}">Example Credential Username</td>
-                            <td th:text="${credential.password}">Example Credential Password</td>
+                            <th data-content="url" scope="row" th:text="${credential.url}">Example Credential URL</th>
+                            <td data-content="username" th:text="${credential.username}">Example Credential Username</td>
+                            <td data-content="password" th:text="${credential.password}">Example Credential Password</td>
                         </tr>
                         </tbody>
                     </table>
@@ -221,7 +221,7 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary" onclick="$('#credentialSubmit').click();">
+                                <button id = "save-credential-button" type="button" class="btn btn-primary" onclick="$('#credentialSubmit').click();">
                                     Save changes
                                 </button>
                             </div>
