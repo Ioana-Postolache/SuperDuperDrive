@@ -36,14 +36,6 @@ public class FileController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")
                 .body(file.getFileData());
     }
-//    // option using param
-//    @GetMapping("/files")
-//    public @ResponseBody
-//    byte[] getFile(Authentication authentication, @RequestParam("fileName") String fileName) {
-//        int userId = userService.getUser(authentication.getName()).getUserId();
-//        File file = this.fileListService.getFile(userId, fileName);
-//        return file.getFileData();
-//    }
 
     @PostMapping("/files")
     public RedirectView uploadFile(Authentication authentication, @RequestParam("fileUpload") MultipartFile uploadedFile, RedirectAttributes redirectAttributes) throws IOException {
