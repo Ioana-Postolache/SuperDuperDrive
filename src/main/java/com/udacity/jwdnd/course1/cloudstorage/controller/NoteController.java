@@ -25,8 +25,10 @@ public class NoteController {
         noteForm.setUserId(userId);
         if (noteForm.getNoteId() == null) {
             this.noteListService.addNote(noteForm);
+            redirectAttributes.addFlashAttribute("noteSuccess", "Note successfully created.");
         } else {
             this.noteListService.updateNote(noteForm);
+            redirectAttributes.addFlashAttribute("noteSuccess", "Note successfully updated.");
         }
         noteForm.setNoteId(null);
         noteForm.setNoteTitle("");

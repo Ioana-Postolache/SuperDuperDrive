@@ -49,10 +49,10 @@
                         </div>
                     </div>
                 </form>
-                <div id="error-msg" th:if="${fileError}" th:text="${fileError}" class="alert alert-danger">
+                <div id="error-file" th:if="${fileError}" th:text="${fileError}" class="alert alert-danger">
                     File couldn't be added
                 </div>
-                <div id="success-msg" th:if="${fileSuccess}" th:text="${fileSuccess}" class="alert alert-dark">
+                <div id="success-file" th:if="${fileSuccess}" th:text="${fileSuccess}" class="alert alert-dark">
                     File successfully added!
                 </div>
                 <div class="table-responsive">
@@ -83,7 +83,12 @@
                         onclick="showNoteModal()">
                     + Add a New Note
                 </button>
-
+                <div id="error-note" th:if="${noteError}" th:text="${noteError}" class="alert alert-danger">
+                    Note couldn't be added
+                </div>
+                <div id="success-note" th:if="${noteSuccess}" th:text="${noteSuccess}" class="alert alert-dark">
+                    Note successfully added!
+                </div>
                 <div class="table-responsive">
                     <table class="table table-striped" id="noteTable">
                         <thead>
@@ -155,7 +160,12 @@
                         onclick="showCredentialModal()">
                     + Add a New Credential
                 </button>
-
+                <div id="error-credential" th:if="${credentialError}" th:text="${credentialError}" class="alert alert-danger">
+                    Credential couldn't be added
+                </div>
+                <div id="success-credential" th:if="${credentialSuccess}" th:text="${credentialSuccess}" class="alert alert-dark">
+                    Credentual successfully added!
+                </div>
                 <div class="table-responsive">
                     <table class="table table-striped" th:object="${credentials}" id="credentialTable">
                         <thead>

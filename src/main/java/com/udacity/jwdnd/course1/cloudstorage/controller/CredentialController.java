@@ -27,8 +27,10 @@ public class CredentialController {
         credentialForm.setUserId(userId);
         if (credentialForm.getCredentialId() == null) {
             this.credentialListService.addCredential(credentialForm);
+            redirectAttributes.addFlashAttribute("credentialSuccess", "Credential successfully created.");
         } else {
             this.credentialListService.updateCredential(credentialForm);
+            redirectAttributes.addFlashAttribute("credentialSuccess", "Credential successfully updated.");
         }
         credentialForm.setCredentialId(null);
         credentialForm.setPassword("");
