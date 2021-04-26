@@ -1,21 +1,28 @@
 package com.udacity.jwdnd.course1.cloudstorage.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 
-// source: https://www.baeldung.com/custom-error-page-spring-mvc
+// adapted from: https://www.baeldung.com/custom-error-page-spring-mvc
 @Controller
 public class ErrorController {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ErrorController.class);
 
     @RequestMapping(value = "errors", method = RequestMethod.GET)
     public String renderErrorPage(HttpServletRequest httpRequest, Model model) {
 
         String error;
         int httpErrorCode = getErrorCode(httpRequest);
+        String endpoint = String.valueOf(httpRequest.getAttribute(RequestDispatcher.FORWARD_REQUEST_URI));
+        Exception ex = ((Exception) httpRequest.getAttribute(RequestDispatcher.ERROR_EXCEPTION));
 
         switch (httpErrorCode) {
             case 400: {
@@ -37,6 +44,7 @@ public class ErrorController {
             default:
                 error = "There was an error";
         }
+        LOGGER.error(String.format("Error code %s was thrown from %s. Exception was: %s", httpErrorCode, endpoint, ex));
         model.addAttribute("error", error);
         return "error";
     }
