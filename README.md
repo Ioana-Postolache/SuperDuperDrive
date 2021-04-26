@@ -6,7 +6,7 @@ Interface for an app for cloud storage with 3 user-facing features:
 3. **Password Management:** Save, edit, and delete website credentials.  
 
 ## Starter Project
-Starter project downloaded from:  [You can download or clone the starter repository here](https://github.com/udacity/nd035-c1-spring-boot-basics-project-starter/tree/master/starter/cloudstorage).
+Starter project downloaded from:  [here](https://github.com/udacity/nd035-c1-spring-boot-basics-project-starter/tree/master/starter/cloudstorage).
 
 Database schema for the project: `src/main/resources` directory.  
 
@@ -118,5 +118,3 @@ String decryptedPassword = encryptionService.decryptValue(encryptedPassword, enc
 [Hash Function](https://en.wikipedia.org/wiki/Hash_function)
 [Encryption](https://en.wikipedia.org/wiki/Encryption)
 
-
-File upload: https://attacomsian.com/blog/spring-boot-thymeleaf-file-upload
